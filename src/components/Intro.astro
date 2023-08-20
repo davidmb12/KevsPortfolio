@@ -1,0 +1,116 @@
+---
+import paint from "/paint.png";
+import portrait from "/kevs-avatar.jpg";
+---
+
+<div
+  class="relative mx-12 flex flex-col items-center justify-center gap-12 xl:flex-row xl:gap-36"
+>
+  <div class="w-full xl:w-1/2">
+    <h1 class="text-xl">
+      Enter Kevin's Sketches <span class="font-bold"> Digital Universe</span>
+    </h1>
+    <div class="relative">
+      <svg class="absolute h-full w-full overflow-visible">
+        <defs>
+          <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style={{ stopColor: "#FFFFF", stopOpacity: 1 }}
+            ></stop>
+            <stop offset="100%" style={{ stopColor: "#0000", stopOpacity: 1 }}
+            ></stop>
+          </linearGradient>
+        </defs>
+        <path
+          id="border-path"
+          fill="none"
+          stroke="url(#gradient)"
+          stroke-width="4"></path>
+      </svg>
+
+      <p id="anim-p" class="p-6 text-lg">
+        So you've stumbled upon <span class="font-bold text-primary">
+          Kevs</span
+        > digital art digital space digital made with digital...<br />
+        Stick around, explore the masterpieces, and enjoy.<br />
+        Keep an eye out, maybe there's something here that could stop the implacable
+        pass of time and bring back some emotions to the rotting corpse reading this...<br
+        />
+        or just maybe... you know... have fun or something
+      </p>
+    </div>
+    <div class="flex justify-center pt-12 text-center mb-12 xl:gap-16">
+      <div class="w-32">
+        <h2>Art Posts</h2>
+        <p id="art-counter" class="text-xl font-bold">85</p>
+      </div>
+      <div class="w-32">
+        <h2>Insta</h2>
+        <p id="insta-counter" class="text-xl font-bold">1</p>
+      </div>
+      <div class="w-32">
+        <h2>Stuff</h2>
+        <p id="stuff-counter" class="text-xl font-bold">50</p>
+      </div>
+    </div>
+  </div>
+  <div class="relative">
+    <img class="h-full rounded-xl" src={portrait} alt="" />
+  </div>
+</div>
+<div class="mt-12 h-4 w-full bg-black"></div>
+
+<style>
+  #border-path {
+    animation: draw 1s forwards 1s ease-out;
+  }
+  @keyframes draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+</style>
+<script>
+  function updatePath() {
+    const textMain = document.querySelector("#anim-p") as HTMLElement;
+    const path = document.querySelector("#border-path") as SVGPathElement;
+
+    if (textMain && path) {
+      path.setAttribute(
+        "d",
+        `M0,0 V${textMain.offsetHeight} H${textMain.offsetWidth} v${
+          textMain.offsetHeight / 2
+        }`
+      );
+    }
+    const pathLength = path.getTotalLength();
+    path.style.strokeDasharray = pathLength.toString();
+    path.style.strokeDashoffset = pathLength.toString();
+  }
+
+  function incrementCounter(
+    selector: string,
+    current: number,
+    target: number,
+    duration: number,
+    letter: string
+  ) {
+    let counter = document.getElementById(selector);
+    let stepTime = Math.abs(Math.floor(duration / target));
+
+    if (current < target && counter) {
+      current++;
+      counter.innerText = current.toString() + letter;
+      setTimeout(
+        () => incrementCounter(selector, current, target, duration, letter),
+        stepTime
+      );
+    }
+  }
+
+  //Increment
+  incrementCounter("art-counter", 0, 85, 2000, "");
+  incrementCounter("insta-counter", 0, 10, 2000, "m");
+  incrementCounter("stuff-counter", 0, 1, 2000, " stuff");
+  window.addEventListener("DOMContentLoaded", updatePath);
+  window.addEventListener("resize", updatePath);
+</script>
